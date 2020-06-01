@@ -1,0 +1,41 @@
+[all:vars]
+ansible_become_pass=
+ansible_ssh_private_key_file=
+ansible_user = 
+ansible_port = 
+ansible_python_interpreter =
+
+[es-master]
+
+
+[es-vote]
+
+
+[es-data]
+
+
+[es-coord]
+
+
+[all-in-one]
+
+
+[kibana]
+
+
+[metricbeat:children]
+es-master
+es-vote
+es-data
+es-coord
+kibana
+all-in-one
+
+
+[filebeat:children]
+es-master
+es-vote
+es-data
+es-coord
+kibana
+all-in-one

@@ -1,0 +1,11 @@
+---
+# vars file for kibana
+es_major_version: '{{ elastic_branch }}.x'
+kibana_package_name: '{{ es_use_oss_version | ternary("kibana-oss", "kibana") }}'
+es_repo_name: '{{ es_use_oss_version | ternary("oss-" + es_major_version, es_major_version) }}'
+default:
+  kibana_home: /usr/share/kibana
+  kibana_pid_dir: /var/run/kibana
+  kibana_log_dir: /var/log/kibana
+  kibana_conf_dir: /etc/kibana
+  kibana_data_dir: /var/lib/kibana

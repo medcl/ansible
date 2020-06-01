@@ -1,0 +1,23 @@
+es_instance_name: "vote"
+es_heap_size: "2g"
+es_config:
+  http.port: 9203
+  transport.port: 9303
+  node.data: false
+  node.master: true
+  node.voting_only: true
+  node.attr.tag: "vote"
+    
+  cluster.name: "{{es_cluster_name}}"
+  xpack.security.enabled: true
+  cluster.initial_master_nodes: "{{es_cluster_initial_master_nodes}}"
+  discovery.seed_hosts: "{{es_discovery_seed_hosts}}"
+  xpack.security.http.ssl.verification_mode: none
+  network.host: "{{es_main_network_device}},_local_"
+  bootstrap.memory_lock: true
+  http.max_initial_line_length: "8k"
+  http.max_header_size: "16k"
+  indices.memory.index_buffer_size: 20%
+  thread_pool.write.queue_size: 2000
+  http.cors.enabled: true
+  http.cors.allow-origin: /.*/

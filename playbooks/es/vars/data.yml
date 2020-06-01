@@ -1,0 +1,22 @@
+es_instance_name: "data"
+es_heap_size: "4g"
+es_config:
+  http.port: 9201
+  transport.port: 9301
+  node.data: true
+  node.master: false
+  node.attr.tag: ["data","hot"]
+
+  cluster.name: "{{es_cluster_name}}"
+  xpack.security.enabled: true
+  cluster.initial_master_nodes: "{{es_cluster_initial_master_nodes}}"
+  discovery.seed_hosts: "{{es_discovery_seed_hosts}}"
+  xpack.security.http.ssl.verification_mode: none
+  network.host: "{{es_main_network_device}},_local_"
+  bootstrap.memory_lock: true
+  http.max_initial_line_length: "8k"
+  http.max_header_size: "16k"
+  indices.memory.index_buffer_size: 20%
+  thread_pool.write.queue_size: 2000
+  http.cors.enabled: true
+  http.cors.allow-origin: /.*/

@@ -1,0 +1,9 @@
+---
+
+- fail: msg="beat must be specified and cannot be blank e.g. filebeat"
+  when: beat is not defined or beat == ''
+
+- fail: msg="beat_conf must be specified"
+  when: beat_conf is not defined
+
+- set_fact: "beats_major_version={{ beats_version[0] }}.x"

@@ -1,0 +1,34 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: "kibana"
+  author: "Lean Delivery Team <team@lean-delivery.com>"
+  description: "Role for kibana installation"
+  company: "EPAM Systems "
+  license: "Apache"
+  min_ansible_version: 2.5
+  issue_tracker_url: "https://github.com/lean-delivery/ansible-role-kibana/issues"
+
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+    - name: Debian
+      versions:
+        - stretch
+        - jessie
+
+  galaxy_tags:
+    - monitoring
+    - system
+    - kibana
+    - elastic
+    - elasticsearch
+    - elk
+    - web

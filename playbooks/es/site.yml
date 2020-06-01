@@ -1,0 +1,45 @@
+- hosts: es-master
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - role: elastic.elasticsearch
+  vars_files:
+    - ../vars/vars.yml
+    - ./vars/vars.yml
+    - ./vars/master.yml
+
+    
+- hosts: es-vote
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - role: elastic.elasticsearch
+  vars_files:
+    - ../vars/vars.yml
+    - ./vars/vars.yml
+    - ./vars/vote.yml
+    
+- hosts: es-data
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - role: elastic.elasticsearch
+  vars_files:
+    - ../vars/vars.yml
+    - ./vars/vars.yml
+    - ./vars/data.yml
+
+
+- hosts: es-coord
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - role: elastic.elasticsearch
+  vars_files:
+    - ../vars/vars.yml
+    - ./vars/vars.yml
+    - ./vars/coord.yml

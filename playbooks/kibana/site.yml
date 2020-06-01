@@ -1,0 +1,21 @@
+- name: Install kibana
+  hosts: kibana
+  become: true
+  become_user: root
+  become_method: sudo
+  vars_files:
+    - ../vars/vars.yml
+  vars:
+    elastic_branch: 7
+    kibana_version: 7.7.0
+    kibana_host: 0.0.0.0
+    elasticsearch_host: "{{es_api_host}}"
+    elasticsearch_port: "{{es_api_port}}"
+    elasticsearch_schema: https
+    kibana_config:
+      xpack.security.enabled: True
+      elasticsearch.username: '{{es_api_basic_auth_username}}'
+      elasticsearch.password: '{{es_api_basic_auth_password}}'
+      elasticsearch.ssl.verificationMode: 'none'
+  roles:
+     - role: elastic.kibana

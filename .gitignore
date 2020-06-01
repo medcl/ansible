@@ -1,0 +1,7 @@
+.vscode
+.github
+.DS_Store
+*.swp
+ssh_cert
+*副本
+*.retry

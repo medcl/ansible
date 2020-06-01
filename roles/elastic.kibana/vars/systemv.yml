@@ -1,0 +1,6 @@
+---
+kibana_service_script: kibana
+kibana_service_path: /etc/init.d
+kibana_service_script_mode: 0755
+kibana_service_handlers:
+  - Restart kibana

@@ -1,0 +1,44 @@
+- name: installing Metricbeat
+  hosts: metricbeat
+  become: true
+  become_user: root
+  become_method: sudo
+  vars_files:
+    - ../vars/vars.yml
+  roles:
+    - { role: elastic.beats, beat: "metricbeat",
+        beat_conf: {
+  "metricbeat.modules": [
+    {
+      "module": "system",
+      "enabled": true
+    }
+  ],
+  "tags": [
+    "elastic"
+  ],
+  "fields_under_root": true,
+  "fields": {
+    "labels.environment": "prod"
+  },
+  "xpack.monitoring.enabled": true,
+},
+        output_conf : {
+          "elasticsearch": {
+             "hosts": [
+               "{{es_api_host}}:{{es_api_port}}"
+             ],
+             "username": "{{es_api_basic_auth_username}}",
+             "password": "{{es_api_basic_auth_password}}",
+             "ssl.verification_mode": "none",
+             "ssl.enabled": true,
+             "protocol": "https",
+
+          } 
+
+        } 
+    }
+  vars:
+    use_repository: "true"
+    beats_version: 7.7.0
+    version_lock: true

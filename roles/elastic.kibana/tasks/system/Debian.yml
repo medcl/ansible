@@ -1,0 +1,46 @@
+---
+- name: Set kibana version if defined
+  set_fact:
+    kibana_package_name: '{{ kibana_package_name }}={{ kibana_version }}'
+  when: kibana_version.find('.x') == -1
+
+- block:
+    - name: Install apt-transport-https
+      apt:
+        name: apt-transport-https
+        state: present
+      register: installed_transport
+      until: installed_transport is succeeded
+
+    - name: Elastic latest GPG Key
+      apt_key:
+        url: '{{ elastic_gpg_key }}'
+        state: present
+      register: install_key
+      until: install_key is succeeded
+
+    - name: Add elasticsearch repo
+      apt_repository:
+        repo: '{{ es_apt_url }}'
+        state: present
+        update_cache: true
+        filename: '{{ es_repo_file }}.list'
+
+    - name: Debian - Installing kibana package
+      apt:
+        name: '{{ kibana_package_name }}'
+        state: present
+        force: true
+      register: installed_package
+      until: installed_package is succeeded
+      notify: Restart kibana
+
+    - name: Create systemd path
+      file:
+        path: '{{ kibana_service_path }}'
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+
+  become: true

@@ -1,0 +1,63 @@
+---
+- name: Load a variable file based on the service manager
+  include_vars: '{{ service_manager }}'
+  with_first_found:
+    - '{{ ansible_service_mgr }}.yml'
+    - systemv.yml
+  loop_control:
+    loop_var: service_manager
+
+- name: Load a variable file based on the OS type, or a default if not found
+  include_vars: '{{ platform_vars }}'
+  with_first_found:
+    - '{{ ansible_os_family }}.yml'
+  loop_control:
+    loop_var: platform_vars
+
+- name: Ensure python OpenSSL dependencies are installed.
+  pip:
+    name: pyOpenSSL
+    state: present    
+
+- name: Ensure directory exists for local self-signed TLS certs.
+  file:
+    path: /etc/kibana/ssl/
+    state: directory
+    
+
+- name: Generate an OpenSSL private key.
+  openssl_privatekey:
+    path: /etc/kibana/ssl/privkey.pem
+    mode: 0644
+
+- name: Generate an OpenSSL CSR.
+  openssl_csr:
+    path: /etc/ssl/private/kibana.csr
+    privatekey_path: /etc/kibana/ssl/privkey.pem
+    common_name: "kibana"
+    mode: 0644
+
+- name: Generate a Self Signed OpenSSL certificate.
+  openssl_certificate:
+    path: /etc/kibana/ssl/fullchain.pem
+    privatekey_path: /etc/kibana/ssl/privkey.pem
+    csr_path: /etc/ssl/private/kibana.csr
+    provider: selfsigned
+    mode: 0644
+
+- name: Install kibana packages for current OS
+  include_tasks: '{{ platform }}'
+  with_first_found:
+    - 'system/{{ ansible_os_family }}.yml'
+    - system/not-supported.yml
+  loop_control:
+    loop_var: platform
+
+- name: Install kibana
+  include_tasks: install-kibana.yml
+
+- name: Ensure that kibana is started and enabled on startup
+  service:
+    name: kibana
+    state: started
+  become: true

@@ -1,0 +1,7 @@
+---
+kibana_service_script: kibana.service
+kibana_service_path: /usr/lib/systemd/system
+kibana_service_script_mode: 0644
+kibana_service_handlers:
+  - Reload systemd configuration
+  - Restart kibana

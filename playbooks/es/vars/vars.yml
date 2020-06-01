@@ -1,0 +1,32 @@
+## use custom package url
+# es_use_repository: false
+# es_custom_package_url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.7.0-amd64.deb"
+
+## use official repo
+es_version: 7.7.0
+es_version_lock: true
+es_use_repository: true
+
+# es_allow_downgrades: true
+es_enable_xpack: true
+es_xpack_ssl_key_src: 'certs/instance.key'
+es_xpack_ssl_certificate_src: 'certs/instance.crt'
+es_xpack_ssl_certificate_authorities_src: 'certs/ca.crt'
+es_xpack_certificates_on_host: 'no'
+  
+es_cluster_name: "prod-cluster"
+
+es_main_network_device: "_eth0_"
+
+es_start_service: true
+es_restart_on_change: true
+es_max_map_count: 2621440
+es_max_open_files: 655360
+es_max_threads: 40960
+
+es_data_dirs:
+- "/data/elasticsearch-prod"
+es_log_dir: "/data/elasticsearch-logs"
+
+es_scripts: true
+es_templates: false

@@ -1,0 +1,29 @@
+- hosts: all-in-one
+  become: true
+  become_user: root
+  become_method: sudo
+  roles:
+    - role: elastic.elasticsearch
+  vars_files:
+    - ../vars/vars.yml
+    - ./vars/vars.yml
+  vars:    
+    es_instance_name: "all"
+    es_heap_size: "512m"
+    es_config:
+      node.data: true
+      node.master: true
+      http.port: 9200
+      transport.port: 9300
+      cluster.name: "{{es_cluster_name}}"
+      xpack.security.enabled: true
+      cluster.initial_master_nodes: "{{es_cluster_initial_master_nodes}}"
+      network.host: "{{es_main_network_device}},_local_"
+      xpack.security.http.ssl.verification_mode: none
+      bootstrap.memory_lock: true
+      http.max_initial_line_length: "8k"
+      http.max_header_size: "16k"
+      indices.memory.index_buffer_size: 20%
+      thread_pool.write.queue_size: 2000
+      http.cors.enabled: true
+      http.cors.allow-origin: /.*/

@@ -1,0 +1,71 @@
+- name: installing Filebeat
+  hosts: filebeat 
+  become: true
+  become_user: root
+  become_method: sudo
+  vars_files:
+    - ../vars/vars.yml
+  roles:
+    - { role: elastic.beats, beat: "filebeat",
+        beat_conf: {
+  "filebeat.modules": [
+    {
+      "module": "system",
+      "enabled": true,
+      "syslog": {
+        "enabled": true
+      }
+    },
+    {
+      "module": "auditd",
+      "log": {
+        "enabled": true,
+        "var.paths": [
+          "/var/log/audit/audit.log*"
+        ]
+      }
+    }
+  ],
+  "tags": [
+    "syslog"
+  ],
+  "fields_under_root": true,
+  "fields": {
+    "labels.environment": "prod",
+    "labels.location": "beijing",
+  },
+  "filebeat.inputs": [
+    {
+      "type": "log",
+      "tags": [
+        "plain_message", "elastic"
+      ],
+      "fields_under_root": true,
+      "fields": {
+        "labels.environment": "prod",
+      },
+      "paths": [
+        "/var/log/*/*.log"
+      ]
+    }
+  ],
+  "xpack.monitoring.enabled": true
+},
+        output_conf : {
+          "elasticsearch": {
+             "hosts": [
+               "{{es_api_host}}:{{es_api_port}}"
+             ],
+             "protocol": "https",
+             "username": "{{es_api_basic_auth_username}}",
+             "password": "{{es_api_basic_auth_password}}",
+            "ssl.verification_mode": "none",
+            "ssl.enabled": true
+          } 
+
+        } 
+    }
+  vars:
+    use_repository: "true"
+    beats_version: 7.7.0
+    version_lock: true
