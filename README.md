@@ -71,7 +71,7 @@ EOF
 
 ## Create `hosts` config
 
-```/home/test/ansible/hosts
+```./hosts
 [all-in-one]
 172.16.50.4
 172.16.50.5
@@ -112,9 +112,11 @@ git clone https://github.com/medcl/ansible.git  ansible
 
 ## Create playbook 
 
-Modify the relevant configuration of each node separately. parameters to be adjusted include IP, memory size, and data path etc, as follows:
+You can create your own playbook, but here ships with examples, `es/site.yml` is for multi-role elasticsearch deployment, you can modify the relevant configuration of each node separately in `es/vars/{ROLE}.yml`. general parameters are located in `es/vars/vars.yml`.
 
-```/home/test/ansible/playbook/site.yml
+Let's check `es/site-all-in-one.yml` to deploy unified roles for example, usually you only need to configure heap size:
+
+```
 - hosts: all-in-one
   become: true
   become_user: root
@@ -122,6 +124,7 @@ Modify the relevant configuration of each node separately. parameters to be adju
   roles:
     - role: elastic.elasticsearch
   vars_files:
+    - ../vars/vars.yml
     - ./vars/vars.yml
   vars:    
     es_instance_name: "all"
@@ -129,16 +132,37 @@ Modify the relevant configuration of each node separately. parameters to be adju
     es_config:
       node.data: true
       node.master: true
-      node.attr.tag: "all"
       http.port: 9200
       transport.port: 9300
-      cluster.initial_master_nodes: "172.16.50.4:9300"
-      network.host: "_eth0_,_local_"
+      cluster.name: "{{es_cluster_name}}"
+      xpack.security.enabled: true
+      cluster.initial_master_nodes: "{{es_cluster_initial_master_nodes}}"
+      network.host: "{{es_main_network_device}},_local_"
+      xpack.security.http.ssl.verification_mode: none
+      bootstrap.memory_lock: true
+      http.max_initial_line_length: "8k"
+      http.max_header_size: "16k"
+      indices.memory.index_buffer_size: 20%
+      thread_pool.write.queue_size: 2000
+      http.cors.enabled: true
+      http.cors.allow-origin: /.*/
+```
+
+And also must modify `vars/vars.yml`, these are supposed to be sharable variables, could be potentially used by other playbooks:
+
+```
+es_api_host: 172.31.6.229
+es_api_port: 9200
+es_api_basic_auth_username: "elastic"
+es_api_basic_auth_password: "esrocks"
+
+es_cluster_initial_master_nodes: "172.31.6.229:9300"
+es_discovery_seed_hosts: "172.31.6.229:9300,172.31.6.229:9300"
 ```
 
 ## Prepare self-signed cert files to `certs` folder
 
-The folder should have follow structure:
+You should regenerate your own cert files by run `cd es/certs; ./generate.sh`, the folder should have follow structure:
 
 ```
 -> playbooks/ tree
@@ -149,8 +173,6 @@ The folder should have follow structure:
 |   |   |-- instance.crt
 |   |   |-- instance.key
 ```
-
-or you can generate your own certs by using `./generate.sh`
 
 ## Deploy Elasticsearch
 
@@ -172,6 +194,18 @@ View cluster health.
 curl -u elastic:changeme -k 'https://172.16.50.4:9200/_cluster/health?pretty'
 ```
 
+## Deploy Kibana and beats
+
+Just run the following scripts, kibana and beats should be just deployed.
+
+```
+ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/es/site.yml
+ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/kibana/site.yml
+ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/metricbeat/site.yml 
+ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/filebeat/site.yml 
+```
+
+Open `https://externalIP:5601`, and check it out.
 
 # Development tips
 
@@ -224,14 +258,11 @@ scp playbooks/metricbeat/* $ANSIBLE_NODE:/tmp/ansible/playbooks/metricbeat/
 ```
 
 
-## Deploy
+## Deploy multi playbook at the same time
 
+```
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/es/site.yml ./playbooks/kibana/site.yml  
-
-ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/es/site.yml
-ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/kibana/site.yml
-ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/metricbeat/site.yml 
-ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/filebeat/site.yml 
+```
 
 
 ## Generate and initial password 
