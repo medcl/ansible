@@ -199,7 +199,6 @@ curl -u elastic:changeme -k 'https://172.16.50.4:9200/_cluster/health?pretty'
 Just run the following scripts, kibana and beats should be just deployed.
 
 ```
-ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/es/site.yml
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/kibana/site.yml
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/metricbeat/site.yml 
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/filebeat/site.yml 
