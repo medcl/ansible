@@ -35,9 +35,9 @@ Open port 9300 within cluster nodes, open port 9204 for coordinating nodes, open
 ```
 sudo apt install software-properties-common
 sudo apt-add-repository ppa:ansible/ansible
-apt-get update
-sudo apt install ansible
-sudo apt install python3-pip
+sudo apt-get update
+sudo apt install ansible -y
+sudo apt install python3-pip -y
 ```
 
 ## Generate an SSH Key
@@ -62,7 +62,7 @@ ssh-copy-id -i id_rsa.pub ubuntu@172.16.50.6
 Let Ansible node ignore host verification
 
 ```
-sudo tee ~/.ssh/config <<-'EOF'
+tee ~/.ssh/config <<-'EOF'
 Host *
    StrictHostKeyChecking no
    UserKnownHostsFile=/dev/null
