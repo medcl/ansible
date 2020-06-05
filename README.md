@@ -92,9 +92,9 @@ ansible -b --become-user=root -i hosts all -m shell  -a '/sbin/ifconfig | /bin/g
 
 ```
 ansible -b --become-user=root -i hosts all -m copy -a 'src=./scripts/optimize.sh dest=/tmp/optimize.sh owner=root group=root mode=644 backup=yes'
-ansible -b --become-user=root -i hosts all -a 'chmod a+x /tmp/optimize.sh;/tmp/optimize.sh'
-ansible -b --become-user=root -i hosts all -a 'reboot'
-ansible -b --become-user=root -i hosts all -a 'uptime'   
+ansible -b --become-user=root -i hosts all -m shell -a 'chmod a+x /tmp/optimize.sh;/tmp/optimize.sh'
+ansible -b --become-user=root -i hosts all -m shell -a 'reboot'
+ansible -b --become-user=root -i hosts all -m shell -a 'uptime'   
 ```
 
 
