@@ -212,6 +212,10 @@ Modify `hosts` file, add node for `kibana`
 And run the following scripts, kibana and beats should be just deployed.
 
 ```
+ansible -b --become-user=root -i ./hosts kibana -m shell -a 'sudo apt install python3-pip -y'
+```
+
+```
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/kibana/site.yml
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/metricbeat/site.yml 
 ANSIBLE_ROLES_PATH=./roles ansible-playbook -i ./hosts  ./playbooks/filebeat/site.yml 
