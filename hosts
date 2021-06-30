@@ -1,18 +1,21 @@
 [all:vars]
 #ansible_become_pass=
 #ansible_ssh_private_key_file=
-#ansible_user = 
+ansible_user = ubuntu
 #ansible_port = 22
 #ansible_python_interpreter =
 
 [es-master]
+172.31.9.143
 
 
 [es-vote]
 
 
 [es-data]
-
+172.31.9.143
+172.31.11.46
+172.31.9.155
 
 [es-coord]
 
@@ -21,7 +24,7 @@
 
 
 [kibana]
-
+172.31.9.143
 
 [metricbeat:children]
 es-master

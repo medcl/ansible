@@ -35,7 +35,7 @@ xpack.security.enabled: false
 {% if ("security" in es_xpack_features) and (es_xpack_ssl_key_src != '') %}
 
 xpack.security.transport.ssl.enabled: true
-xpack.security.transport.ssl.verification_mode: certificate 
+xpack.security.transport.ssl.verification_mode: none
 xpack.security.transport.ssl.key: {{ es_xpack_ssl_key_path }}
 xpack.security.transport.ssl.certificate: {{ es_xpack_ssl_certificate_path }} 
 xpack.security.transport.ssl.certificate_authorities: [ {{ es_xpack_ssl_certificate_authorities_path }} ]

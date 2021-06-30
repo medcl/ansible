@@ -3,7 +3,7 @@
 # es_custom_package_url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.7.0-amd64.deb"
 
 ## use official repo
-es_version: 7.7.0
+es_version: 7.10.2
 es_version_lock: true
 es_use_repository: true
 
@@ -16,7 +16,7 @@ es_xpack_certificates_on_host: 'no'
   
 es_cluster_name: "prod-cluster"
 
-es_main_network_device: "_eth0_"
+es_main_network_device: "_site_"
 
 es_start_service: true
 es_restart_on_change: true

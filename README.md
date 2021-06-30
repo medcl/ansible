@@ -9,6 +9,7 @@ Tested on:
 
 - Elastic Stack 7.7 on Ubuntu 18.04 LTS.
 - Elastic Stack 7.9 on Ubuntu 18.04 LTS.
+- Elastic Stack 7.10 on Ubuntu 18.04 LTS.
 
 
 In this example we will use `18.181.163.232` as ansible node:
