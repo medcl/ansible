@@ -26,7 +26,7 @@ openssl req -new -key instance.key -out node.csr  -subj "/CN=$DOMAIN"  \
     -extensions SAN \
     -config infini.ext
 
-openssl x509 -req -in node.csr -CA ca.crt -CAkey ca.key -CAcreateserial -sha256 -out instance.crt   \
+openssl x509 -req -in node.csr -CA ca.crt -CAkey ca.key -CAcreateserial -days 3650  -sha256 -out instance.crt   \
     -extensions SAN \
     -extfile  infini.ext
 
